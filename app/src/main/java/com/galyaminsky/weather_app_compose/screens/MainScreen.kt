@@ -1,7 +1,6 @@
 package com.galyaminsky.weather_app_compose.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +11,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -50,7 +51,7 @@ fun MainScreen() {
                 containerColor = Purple40
             ),
             elevation = CardDefaults.cardElevation(
-                defaultElevation = 5.dp
+                defaultElevation = 2.dp
             ),
             shape = RoundedCornerShape(10.dp)
         ) {
@@ -72,13 +73,61 @@ fun MainScreen() {
                     AsyncImage(
                         model = "https://cdn.weatherapi.com/weather/64x64/night/122.png",
                         contentDescription = "im_2",
-                        modifier = Modifier.size(35.dp)
+                        modifier = Modifier
+                            .size(35.dp)
                             .padding(end = 8.dp, top = 8.dp)
 
                     )
                 }
+                Text(
+                    text = "Lisakovsk",
+                    style = TextStyle(fontSize = 25.sp),
+                    color = Color.White
+                )
+                Text(
+                    text = "-17°",
+                    style = TextStyle(fontSize = 65.sp),
+                    color = Color.White
+                )
+                Text(
+                    text = "Sunny",
+                    style = TextStyle(fontSize = 20.sp),
+                    color = Color.White
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    IconButton(onClick = {
+
+
+                    }) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_search),
+                            contentDescription = "im_search",
+                            tint = Color.White
+                        )
+                    }
+
+
+                    Text(
+                        text = "23° / 12°",
+                        style = TextStyle(fontSize = 16.sp),
+                        color = Color.White
+                    )
+                    IconButton(onClick = {
+
+
+                    }) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_sync),
+                            contentDescription = "im_sync",
+                            tint = Color.White
+
+                        )
+                    }
+                }
             }
         }
-
     }
 }
