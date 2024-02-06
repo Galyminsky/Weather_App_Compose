@@ -59,6 +59,10 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:2.2.2")
 
+    implementation("com.google.accompanist:accompanist-pager:0.28.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
+
+
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
