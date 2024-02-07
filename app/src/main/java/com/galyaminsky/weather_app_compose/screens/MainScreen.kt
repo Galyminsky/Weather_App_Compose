@@ -2,6 +2,7 @@
 
 package com.galyaminsky.weather_app_compose.screens
 
+import android.app.LauncherActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -33,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.galyaminsky.weather_app_compose.R
+import com.galyaminsky.weather_app_compose.data.WeatherModel
 import com.galyaminsky.weather_app_compose.ui.theme.Purple40
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -179,9 +183,33 @@ fun TabLayout() {
             modifier = Modifier.weight(1.0f)
         ) { index ->
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(15) {
-                    ListItem()
+                itemsIndexed(
+                    listOf(WeatherModel (
+                        city = "Lisakovsk",
+                        time = "13:00",
+                        currentTemp = "-17°",
+                        condition = "Sunny",
+                        icon = "//cdn.weatherapi.com/weather/64x64/night/122.png",
+                        "",
+                        "",
+                        ""
+                    ),
+                        WeatherModel (
+                            city = "Lisakovsk",
+                            time = "20 Jun 2024 13:00",
+                            currentTemp = "",
+                            condition = "Sunny",
+                            icon = "//cdn.weatherapi.com/weather/64x64/night/122.png",
+                            "26°",
+                            "17°",
+                            "dfgdfg"
+                        ))
+
+                ) {
+                    _, item ->
+                    ListItem(item)
                 }
+
             }
         }
     }
