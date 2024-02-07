@@ -15,8 +15,10 @@ import androidx.compose.ui.res.painterResource
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.galyaminsky.weather_app_compose.data.WeatherModel
 import com.galyaminsky.weather_app_compose.screens.MainCard
 import com.galyaminsky.weather_app_compose.screens.TabLayout
+import org.json.JSONObject
 
 
 const val API_KEY = "eb001e1861e842a699b120840221012"
@@ -41,20 +43,50 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-private fun getData (city: String, context: Context) {
-    val url = "https://api.weatherapi.com/v1/forecast.json?key=$API_KEY&q=$city&days=3&aqi=no&alerts=no"
+
+private fun getData(city: String, context: Context) {
+    val url =
+        "https://api.weatherapi.com/v1/forecast.json?key=$API_KEY&q=$city&days=3&aqi=no&alerts=no"
     val queue = Volley.newRequestQueue(context)
-    val sRequest = StringRequest (
+    val sRequest = StringRequest(
         Request.Method.GET,
         url,
-        {
-            response ->
-        Log.d("MyLog", "Response: $response")
+        { response ->
+            Log.d("MyLog", "Response: $response")
         },
-        {
-            error ->
+        { error ->
             Log.d("MyLog", "Error: $error")
         }
     )
     queue.add(sRequest)
+}
+
+private fun getWeatherByDays(response: String): List<WeatherModel> {
+    if (response.isEmpty()) return listOf()
+    val list = ArrayList<WeatherModel>()
+    val mainObject = JSONObject(response)
+    val city = mainObject.getJSONObject("location").getString("name")
+    val days = mainObject.getJSONObject("forecast").getJSONArray("forecastday")
+
+    for (i in 0 until days.length()) {
+        val item = days[i] as JSONObject
+        list.add(
+            WeatherModel(
+                city,
+                item.getString("date"),
+                "",
+                item.getJSONObject("day").getJSONObject("condition").getString("text"),
+                item.getJSONObject("day").getJSONObject("condition").getString("icon"),
+                item.getJSONObject("day").getString("maxtemp_c"),
+                item.getJSONObject("day").getString("mintemp_c"),
+                item.getJSONArray("hour").toString()
+
+            )
+        )
+    }
+    list[0] = list[0].copy(
+        time = mainObject.getJSONObject("current").getString("last_updated"),
+        currentTemp = mainObject.getJSONObject("current").getString("temp_c")
+    )
+    return list
 }
