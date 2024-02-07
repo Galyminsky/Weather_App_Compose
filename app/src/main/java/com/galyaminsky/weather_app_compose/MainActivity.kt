@@ -39,11 +39,11 @@ class MainActivity : ComponentActivity() {
                     WeatherModel(
                         city = "",
                         time = "",
-                        currentTemp = "",
+                        currentTemp = "10.0",
                         condition = "",
                         icon = "",
-                        maxTemp = "",
-                        minTemp = "",
+                        maxTemp = "10.0",
+                        minTemp = "10.0",
                         hours = "",
                     )
                 )

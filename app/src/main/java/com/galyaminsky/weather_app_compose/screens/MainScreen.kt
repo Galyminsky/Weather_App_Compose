@@ -89,7 +89,7 @@ fun MainCard(currentDay: MutableState<WeatherModel>) {
                     color = Color.White
                 )
                 Text(
-                    text = "${currentDay.value.currentTemp}°",
+                    text = "${currentDay.value.currentTemp.toFloat().toInt()}°",
                     style = TextStyle(fontSize = 65.sp),
                     color = Color.White
                 )
@@ -115,7 +115,7 @@ fun MainCard(currentDay: MutableState<WeatherModel>) {
 
 
                     Text(
-                        text = "${currentDay.value.maxTemp}° / ${currentDay.value.minTemp}°",
+                        text = "${currentDay.value.maxTemp.toFloat().toInt()}° / ${currentDay.value.minTemp.toFloat().toInt()}°",
                         style = TextStyle(fontSize = 16.sp),
                         color = Color.White
                     )
