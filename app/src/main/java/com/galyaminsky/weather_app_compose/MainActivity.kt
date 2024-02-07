@@ -2,6 +2,7 @@ package com.galyaminsky.weather_app_compose
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -24,6 +25,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            getData("Lisakovsk", this)
             Image(
                 painter = painterResource(id = R.drawable.back_1),
                 contentDescription = "image",
@@ -47,9 +49,12 @@ private fun getData (city: String, context: Context) {
         url,
         {
             response ->
+        Log.d("MyLog", "Response: $response")
         },
         {
             error ->
+            Log.d("MyLog", "Error: $error")
         }
     )
+    queue.add(sRequest)
 }
