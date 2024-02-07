@@ -9,7 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val daysList = remember {
-                mutableStateListOf(listOf<WeatherModel>())
+                mutableStateOf(listOf<WeatherModel>())
             }
             getData("Lisakovsk", this, daysList)
             Image(
@@ -69,7 +69,9 @@ private fun getData(city: String, context: Context, daysList: MutableState<List<
 }
 
 private fun getWeatherByDays(response: String): List<WeatherModel> {
+
     if (response.isEmpty()) return listOf()
+
     val list = ArrayList<WeatherModel>()
     val mainObject = JSONObject(response)
     val city = mainObject.getJSONObject("location").getString("name")

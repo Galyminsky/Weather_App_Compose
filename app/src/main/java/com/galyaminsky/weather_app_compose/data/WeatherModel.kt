@@ -10,4 +10,4 @@ data class WeatherModel(
     val minTemp: String,
     val hours: String,
 
-)
+    )
