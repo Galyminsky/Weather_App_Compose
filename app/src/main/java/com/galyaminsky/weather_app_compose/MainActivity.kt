@@ -8,6 +8,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
@@ -27,7 +30,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            getData("Lisakovsk", this)
+            val daysList = remember {
+                mutableStateListOf(listOf<WeatherModel>())
+            }
+            getData("Lisakovsk", this, daysList)
             Image(
                 painter = painterResource(id = R.drawable.back_1),
                 contentDescription = "image",
@@ -38,13 +44,13 @@ class MainActivity : ComponentActivity() {
             )
             Column() {
                 MainCard()
-                TabLayout()
+                TabLayout(daysList)
             }
         }
     }
 }
 
-private fun getData(city: String, context: Context) {
+private fun getData(city: String, context: Context, daysList: MutableState<List<WeatherModel>>) {
     val url =
         "https://api.weatherapi.com/v1/forecast.json?key=$API_KEY&q=$city&days=3&aqi=no&alerts=no"
     val queue = Volley.newRequestQueue(context)
@@ -52,7 +58,8 @@ private fun getData(city: String, context: Context) {
         Request.Method.GET,
         url,
         { response ->
-            Log.d("MyLog", "Response: $response")
+            val list = getWeatherByDays(response)
+            daysList.value = list
         },
         { error ->
             Log.d("MyLog", "Error: $error")

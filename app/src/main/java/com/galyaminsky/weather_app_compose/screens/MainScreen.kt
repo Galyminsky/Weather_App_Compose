@@ -24,7 +24,9 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -140,7 +142,7 @@ fun MainCard() {
 }
 
 @Composable
-fun TabLayout() {
+fun TabLayout(dayList: SnapshotStateList<List<WeatherModel>>) {
 
     val tabList = listOf("HOURS", "DAYS")
     val pagerState = rememberPagerState()
@@ -184,27 +186,7 @@ fun TabLayout() {
         ) { index ->
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 itemsIndexed(
-                    listOf(WeatherModel (
-                        city = "Lisakovsk",
-                        time = "13:00",
-                        currentTemp = "-17°",
-                        condition = "Sunny",
-                        icon = "//cdn.weatherapi.com/weather/64x64/night/122.png",
-                        "",
-                        "",
-                        ""
-                    ),
-                        WeatherModel (
-                            city = "Lisakovsk",
-                            time = "20 Jun 2024 13:00",
-                            currentTemp = "",
-                            condition = "Sunny",
-                            icon = "//cdn.weatherapi.com/weather/64x64/night/122.png",
-                            "26°",
-                            "17°",
-                            "dfgdfg"
-                        ))
-
+                   dayList.value
                 ) {
                     _, item ->
                     ListItem(item)
