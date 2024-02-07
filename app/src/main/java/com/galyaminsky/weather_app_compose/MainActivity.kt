@@ -30,10 +30,27 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
             val daysList = remember {
                 mutableStateOf(listOf<WeatherModel>())
             }
-            getData("Lisakovsk", this, daysList)
+            val currentDay = remember {
+                mutableStateOf(
+                    WeatherModel(
+                        city = "",
+                        time = "",
+                        currentTemp = "",
+                        condition = "",
+                        icon = "",
+                        maxTemp = "",
+                        minTemp = "",
+                        hours = "",
+                    )
+                )
+
+            }
+
+            getData("Lisakovsk", this, daysList, currentDay)
             Image(
                 painter = painterResource(id = R.drawable.back_1),
                 contentDescription = "image",
@@ -43,14 +60,16 @@ class MainActivity : ComponentActivity() {
                 contentScale = ContentScale.Crop
             )
             Column() {
-                MainCard()
+                MainCard(currentDay)
                 TabLayout(daysList)
             }
         }
     }
 }
 
-private fun getData(city: String, context: Context, daysList: MutableState<List<WeatherModel>>) {
+private fun getData(
+    city: String, context: Context, daysList: MutableState<List<WeatherModel>>, currentDay: MutableState<WeatherModel>)
+{
     val url =
         "https://api.weatherapi.com/v1/forecast.json?key=$API_KEY&q=$city&days=3&aqi=no&alerts=no"
     val queue = Volley.newRequestQueue(context)
@@ -59,6 +78,7 @@ private fun getData(city: String, context: Context, daysList: MutableState<List<
         url,
         { response ->
             val list = getWeatherByDays(response)
+            currentDay.value = list[0]
             daysList.value = list
         },
         { error ->

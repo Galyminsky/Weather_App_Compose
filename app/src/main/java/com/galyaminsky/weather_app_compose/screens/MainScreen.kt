@@ -42,9 +42,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
-@Preview(showBackground = true)
 @Composable
-fun MainCard() {
+fun MainCard(currentDay: MutableState<WeatherModel>) {
 
     Column(
         modifier = Modifier
@@ -71,12 +70,12 @@ fun MainCard() {
                     Text(
                         modifier = Modifier
                             .padding(top = 8.dp, start = 8.dp),
-                        text = "20 Jun 2024 13:00",
+                        text = currentDay.value.time,
                         style = TextStyle(fontSize = 15.sp),
                         color = Color.White
                     )
                     AsyncImage(
-                        model = "https://cdn.weatherapi.com/weather/64x64/night/122.png",
+                        model = "https:${currentDay.value.icon}",
                         contentDescription = "im_2",
                         modifier = Modifier
                             .size(35.dp)
@@ -85,17 +84,17 @@ fun MainCard() {
                     )
                 }
                 Text(
-                    text = "Lisakovsk",
+                    text = currentDay.value.city,
                     style = TextStyle(fontSize = 25.sp),
                     color = Color.White
                 )
                 Text(
-                    text = "-17°",
+                    text = "${currentDay.value.currentTemp}°",
                     style = TextStyle(fontSize = 65.sp),
                     color = Color.White
                 )
                 Text(
-                    text = "Sunny",
+                    text = currentDay.value.condition,
                     style = TextStyle(fontSize = 20.sp),
                     color = Color.White
                 )
@@ -116,7 +115,7 @@ fun MainCard() {
 
 
                     Text(
-                        text = "23° / 12°",
+                        text = "${currentDay.value.maxTemp}° / ${currentDay.value.minTemp}°",
                         style = TextStyle(fontSize = 16.sp),
                         color = Color.White
                     )

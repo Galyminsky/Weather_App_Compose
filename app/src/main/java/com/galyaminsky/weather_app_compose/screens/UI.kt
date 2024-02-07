@@ -59,7 +59,7 @@ fun ListItem(item: WeatherModel) {
 
             }
             Text(
-                text = item.currentTemp.ifEmpty { "${item.maxTemp} / ${item.minTemp}" },
+                text = item.currentTemp.ifEmpty { "${item.maxTemp}° / ${item.minTemp}°" },
                 color = Color.White,
                 style = TextStyle(fontSize = 25.sp)
             )
