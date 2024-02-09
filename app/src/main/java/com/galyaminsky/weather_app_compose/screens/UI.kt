@@ -136,7 +136,7 @@ fun DialogSearch(dialogState: MutableState<Boolean>, onSubmit: (String) -> Unit)
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Search City")
                 TextField(value = dialogText.value, onValueChange = {
-                        dialogText.value = it
+                    dialogText.value = it
                 })
             }
         }
