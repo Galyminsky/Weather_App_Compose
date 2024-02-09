@@ -89,7 +89,9 @@ fun MainCard(currentDay: MutableState<WeatherModel>) {
                 Text(
                     text = if (currentDay.value.currentTemp.isNotEmpty())
                         currentDay.value.currentTemp.toFloat().toInt().toString() + "°"
-                    else "${currentDay.value.maxTemp}° / ${currentDay.value.minTemp}°",
+                    else "${
+                        currentDay.value.maxTemp.toFloat().toInt()
+                    }° / ${currentDay.value.minTemp.toFloat().toInt()}°",
                     style = TextStyle(fontSize = 65.sp),
                     color = Color.White
                 )
