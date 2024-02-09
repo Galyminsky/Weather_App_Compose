@@ -1,5 +1,6 @@
 package com.galyaminsky.weather_app_compose.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +32,7 @@ fun MainList(list: List<WeatherModel>, currentDay: MutableState<WeatherModel>) {
         itemsIndexed(
             list
         ) { _, item ->
-            ListItem(item)
+            ListItem(item, currentDay)
         }
     }
 
@@ -39,12 +40,15 @@ fun MainList(list: List<WeatherModel>, currentDay: MutableState<WeatherModel>) {
 
 
 @Composable
-fun ListItem(item: WeatherModel) {
+fun ListItem(item: WeatherModel, currentDay: MutableState<WeatherModel>) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 3.dp),
+            .padding(top = 3.dp)
+            .clickable {
+                currentDay.value = item
+            },
         colors = CardDefaults.cardColors(
             containerColor = Purple40
         ),
