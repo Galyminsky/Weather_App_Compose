@@ -60,7 +60,14 @@ class MainActivity : ComponentActivity() {
                 contentScale = ContentScale.Crop
             )
             Column() {
-                MainCard(currentDay)
+                MainCard(currentDay, onClickSync = {
+                    getData(
+                        "Lisakovsk",
+                        this@MainActivity,
+                        daysList,
+                        currentDay
+                    )
+                })
                 TabLayout(daysList, currentDay)
             }
         }
