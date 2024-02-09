@@ -3,14 +3,18 @@ package com.galyaminsky.weather_app_compose.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +24,18 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.galyaminsky.weather_app_compose.data.WeatherModel
 import com.galyaminsky.weather_app_compose.ui.theme.Purple40
+
+@Composable
+fun MainList(list: List<WeatherModel>, currentDay: MutableState<WeatherModel>) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        itemsIndexed(
+            list
+        ) { _, item ->
+            ListItem(item)
+        }
+    }
+
+}
 
 
 @Composable
@@ -61,7 +77,11 @@ fun ListItem(item: WeatherModel) {
 
             Text(
 
-                text = item.currentTemp.ifEmpty { "${item.maxTemp.toFloat().toInt()}° / ${item.minTemp.toFloat().toInt()}°" },
+                text = item.currentTemp.ifEmpty {
+                    "${
+                        item.maxTemp.toFloat().toInt()
+                    }° / ${item.minTemp.toFloat().toInt()}°"
+                },
                 color = Color.White,
                 style = TextStyle(fontSize = 25.sp)
             )

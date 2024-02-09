@@ -138,7 +138,7 @@ fun MainCard(currentDay: MutableState<WeatherModel>) {
 }
 
 @Composable
-fun TabLayout(daysList: MutableState<List<WeatherModel>>) {
+fun TabLayout(daysList: MutableState<List<WeatherModel>>, currentDay: MutableState<WeatherModel>) {
 
     val tabList = listOf("HOURS", "DAYS")
     val pagerState = rememberPagerState()
@@ -180,13 +180,7 @@ fun TabLayout(daysList: MutableState<List<WeatherModel>>) {
             state = pagerState,
             modifier = Modifier.weight(1.0f)
         ) { index ->
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                itemsIndexed(
-                    daysList.value
-                ) { _, item ->
-                    ListItem(item)
-                }
-            }
+            MainList(daysList.value, currentDay)
         }
     }
 }
