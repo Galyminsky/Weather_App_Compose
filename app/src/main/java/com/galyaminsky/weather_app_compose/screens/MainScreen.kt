@@ -5,11 +5,9 @@ package com.galyaminsky.weather_app_compose.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -21,6 +19,7 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,20 +27,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.galyaminsky.weather_app_compose.R
+import com.galyaminsky.weather_app_compose.data.WeatherModel
 import com.galyaminsky.weather_app_compose.ui.theme.Purple40
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 
-@Preview(showBackground = true)
 @Composable
-fun MainCard() {
+fun MainCard(
+    currentDay: MutableState<WeatherModel>,
+    onClickSync: () -> Unit,
+    onClickSearch: () -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -68,12 +72,12 @@ fun MainCard() {
                     Text(
                         modifier = Modifier
                             .padding(top = 8.dp, start = 8.dp),
-                        text = "20 Jun 2024 13:00",
+                        text = currentDay.value.time,
                         style = TextStyle(fontSize = 15.sp),
                         color = Color.White
                     )
                     AsyncImage(
-                        model = "https://cdn.weatherapi.com/weather/64x64/night/122.png",
+                        model = "https:${currentDay.value.icon}",
                         contentDescription = "im_2",
                         modifier = Modifier
                             .size(35.dp)
@@ -82,17 +86,21 @@ fun MainCard() {
                     )
                 }
                 Text(
-                    text = "Lisakovsk",
+                    text = currentDay.value.city,
                     style = TextStyle(fontSize = 25.sp),
                     color = Color.White
                 )
                 Text(
-                    text = "-17°",
+                    text = if (currentDay.value.currentTemp.isNotEmpty())
+                        currentDay.value.currentTemp.toFloat().toInt().toString() + "°"
+                    else "${
+                        currentDay.value.maxTemp.toFloat().toInt()
+                    }° / ${currentDay.value.minTemp.toFloat().toInt()}°",
                     style = TextStyle(fontSize = 65.sp),
                     color = Color.White
                 )
                 Text(
-                    text = "Sunny",
+                    text = currentDay.value.condition,
                     style = TextStyle(fontSize = 20.sp),
                     color = Color.White
                 )
@@ -100,8 +108,9 @@ fun MainCard() {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    IconButton(onClick = {
 
+                    IconButton(onClick = {
+                        onClickSearch.invoke()
 
                     }) {
                         Icon(
@@ -113,13 +122,15 @@ fun MainCard() {
 
 
                     Text(
-                        text = "23° / 12°",
+                        text = "${
+                            currentDay.value.maxTemp.toFloat().toInt()
+                        }° / ${currentDay.value.minTemp.toFloat().toInt()}°",
                         style = TextStyle(fontSize = 16.sp),
                         color = Color.White
                     )
 
                     IconButton(onClick = {
-
+                        onClickSync.invoke()
 
                     }) {
                         Icon(
@@ -136,7 +147,7 @@ fun MainCard() {
 }
 
 @Composable
-fun TabLayout() {
+fun TabLayout(daysList: MutableState<List<WeatherModel>>, currentDay: MutableState<WeatherModel>) {
 
     val tabList = listOf("HOURS", "DAYS")
     val pagerState = rememberPagerState()
@@ -178,11 +189,35 @@ fun TabLayout() {
             state = pagerState,
             modifier = Modifier.weight(1.0f)
         ) { index ->
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(15) {
-                    ListItem()
-                }
+            val list = when (index) {
+                0 -> getWeatherByHours(currentDay.value.hours)
+                1 -> daysList.value
+                else -> daysList.value
             }
+            MainList(list, currentDay)
         }
     }
+
+}
+
+private fun getWeatherByHours(hours: String): List<WeatherModel> {
+    if (hours.isEmpty()) return listOf()
+    val hoursArray = JSONArray(hours)
+    val list = ArrayList<WeatherModel>()
+    for (i in 0 until hoursArray.length()) {
+        val item = hoursArray[i] as JSONObject
+        list.add(
+            WeatherModel(
+                "",
+                item.getString("time"),
+                item.getString("temp_c").toFloat().toInt().toString() + "°",
+                item.getJSONObject("condition").getString("text"),
+                item.getJSONObject("condition").getString("icon"),
+                "",
+                "",
+                "",
+            )
+        )
+    }
+    return list
 }
