@@ -19,6 +19,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.galyaminsky.weather_app_compose.data.WeatherModel
+import com.galyaminsky.weather_app_compose.screens.DialogSearch
 import com.galyaminsky.weather_app_compose.screens.MainCard
 import com.galyaminsky.weather_app_compose.screens.TabLayout
 import org.json.JSONObject
@@ -34,6 +35,11 @@ class MainActivity : ComponentActivity() {
             val daysList = remember {
                 mutableStateOf(listOf<WeatherModel>())
             }
+
+            val dialogState = remember {
+                mutableStateOf(false)
+            }
+
             val currentDay = remember {
                 mutableStateOf(
                     WeatherModel(
@@ -48,6 +54,12 @@ class MainActivity : ComponentActivity() {
                     )
                 )
 
+            }
+
+            if (dialogState.value) {
+                DialogSearch(dialogState, onSubmit = {
+                    getData(it, this, daysList, currentDay)
+                })
             }
 
             getData("Lisakovsk", this, daysList, currentDay)
@@ -67,7 +79,10 @@ class MainActivity : ComponentActivity() {
                         daysList,
                         currentDay
                     )
-                })
+                },
+                    onClickSearch = {
+                        dialogState.value = true
+                    })
                 TabLayout(daysList, currentDay)
             }
         }
